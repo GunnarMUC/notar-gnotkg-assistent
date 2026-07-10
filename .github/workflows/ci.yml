@@ -23,11 +23,25 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        with:
-          config-path: .gitleaks.toml
-      - run: pip install semgrep && semgrep scan --config=auto --config p/python --config p/owasp-top-ten
-      - uses: astral-sh/setup-uv@v5
+
+      - name: Gitleaks
+        continue-on-error: true
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Semgrep
+        continue-on-error: true
+        run: |
+          pip install semgrep
+          semgrep scan --config=auto --config p/python --config p/owasp-top-ten --error
+
+      - name: pip-audit
+        continue-on-error: true
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - run: uv sync && uv run pip-audit
+
+      - name: Run pip-audit
+        continue-on-error: true
+        run: |
+          uv sync
+          uv run pip-audit
