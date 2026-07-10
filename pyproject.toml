@@ -37,8 +37,17 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = [
+[tool.hatch.build.targets.wheel]
+packages = ["core"]
+include = [
+    "app.py",
+    "prompts/*",
+    "templates/*",
+    "data/fee_tables/*",
+]
+
+[dependency-groups]
+dev = [
     "pytest>=8.0",
     "pytest-mock>=3.14",
     "pytest-cov>=5.0",
