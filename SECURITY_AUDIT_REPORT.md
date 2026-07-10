@@ -220,4 +220,4 @@ Die Software wurde mit den empfohlenen Open-Source-Tools (Gitleaks, Semgrep, Bea
 
 ---
 
-*Erstellt am 10. Juli 2026 · Security Audit nach opencode_audit_readiness_instructions.md · GunnarMUC*
+*Erstellt am 10. Juli 2026 · Security Audit nach opencode_audit_readiness_instructions.md · Gunnar Müller*
