@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,7 +15,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync
-      - run: uv run pytest tests/ -v
+      - name: Format check
+        run: uv run ruff format --check .
+      - name: Lint
+        run: uv run ruff check .
+      - name: Type check
+        run: uv run mypy core ui app.py tests --ignore-missing-imports
+      - name: Tests with coverage
+        run: uv run pytest tests/ -v --cov --cov-fail-under=80
 
   security:
     runs-on: ubuntu-latest
@@ -25,23 +32,28 @@ jobs:
           fetch-depth: 0
 
       - name: Gitleaks
-        continue-on-error: true
         uses: gitleaks/gitleaks-action@v2
 
       - name: Semgrep
-        continue-on-error: true
         run: |
           pip install semgrep
           semgrep scan --config=auto --config p/python --config p/owasp-top-ten --error
 
       - name: pip-audit
-        continue-on-error: true
         uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-
       - name: Run pip-audit
-        continue-on-error: true
         run: |
           uv sync
           uv run pip-audit
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync
+      - run: uv run pytest tests/ -v

@@ -1,6 +1,325 @@
 {
   "version": "GNotKG_Stand_2026-01-01_v1",
   "description": "Gebührentabelle B für Notare (Anlage 2 GNotKG)",
-  "last_updated": "2026-01-01",
-  "source": "https://www.gesetze-im-internet.de/gnotkg/anlage_2.html"
+  "valid_from": "2026-01-01",
+  "source": "https://www.gesetze-im-internet.de/gnotkg/anlage_2.html",
+  "currency": "EUR",
+  "table": {
+    "name": "B",
+    "description": "Wertgebühren für Notare (Anlage 2 GNotKG)",
+    "brackets": [
+      {
+        "max_value": 1500.0,
+        "fee": 23.0
+      },
+      {
+        "max_value": 3000.0,
+        "fee": 38.0
+      },
+      {
+        "max_value": 6000.0,
+        "fee": 58.0
+      },
+      {
+        "max_value": 13000.0,
+        "fee": 83.0
+      },
+      {
+        "max_value": 25000.0,
+        "fee": 124.0
+      },
+      {
+        "max_value": 50000.0,
+        "fee": 200.0
+      },
+      {
+        "max_value": 75000.0,
+        "fee": 276.0
+      },
+      {
+        "max_value": 100000.0,
+        "fee": 354.0
+      },
+      {
+        "max_value": 125000.0,
+        "fee": 432.0
+      },
+      {
+        "max_value": 155000.0,
+        "fee": 510.0
+      },
+      {
+        "max_value": 200000.0,
+        "fee": 620.0
+      },
+      {
+        "max_value": 250000.0,
+        "fee": 730.0
+      },
+      {
+        "max_value": 300000.0,
+        "fee": 840.0
+      },
+      {
+        "max_value": 350000.0,
+        "fee": 950.0
+      },
+      {
+        "max_value": 400000.0,
+        "fee": 1060.0
+      },
+      {
+        "max_value": 450000.0,
+        "fee": 1170.0
+      },
+      {
+        "max_value": 500000.0,
+        "fee": 1280.0
+      },
+      {
+        "max_value": 550000.0,
+        "fee": 1390.0
+      },
+      {
+        "max_value": 650000.0,
+        "fee": 1570.0
+      },
+      {
+        "max_value": 750000.0,
+        "fee": 1750.0
+      },
+      {
+        "max_value": 850000.0,
+        "fee": 1930.0
+      },
+      {
+        "max_value": 950000.0,
+        "fee": 2110.0
+      },
+      {
+        "max_value": 1100000.0,
+        "fee": 2360.0
+      },
+      {
+        "max_value": 1300000.0,
+        "fee": 2640.0
+      },
+      {
+        "max_value": 1500000.0,
+        "fee": 2920.0
+      },
+      {
+        "max_value": 1750000.0,
+        "fee": 3290.0
+      },
+      {
+        "max_value": 2000000.0,
+        "fee": 3660.0
+      },
+      {
+        "max_value": 2250000.0,
+        "fee": 4060.0
+      },
+      {
+        "max_value": 2500000.0,
+        "fee": 4460.0
+      },
+      {
+        "max_value": 2750000.0,
+        "fee": 4860.0
+      },
+      {
+        "max_value": 3000000.0,
+        "fee": 5260.0
+      },
+      {
+        "max_value": 3500000.0,
+        "fee": 5910.0
+      },
+      {
+        "max_value": 4000000.0,
+        "fee": 6560.0
+      },
+      {
+        "max_value": 4500000.0,
+        "fee": 7210.0
+      },
+      {
+        "max_value": 5000000.0,
+        "fee": 7860.0
+      },
+      {
+        "max_value": 5500000.0,
+        "fee": 8510.0
+      },
+      {
+        "max_value": 6000000.0,
+        "fee": 9160.0
+      },
+      {
+        "max_value": 6500000.0,
+        "fee": 9810.0
+      },
+      {
+        "max_value": 7000000.0,
+        "fee": 10460.0
+      },
+      {
+        "max_value": 7500000.0,
+        "fee": 11110.0
+      },
+      {
+        "max_value": 8000000.0,
+        "fee": 11760.0
+      },
+      {
+        "max_value": 8500000.0,
+        "fee": 12410.0
+      },
+      {
+        "max_value": 9000000.0,
+        "fee": 13060.0
+      },
+      {
+        "max_value": 9500000.0,
+        "fee": 13710.0
+      },
+      {
+        "max_value": 10000000.0,
+        "fee": 14360.0
+      },
+      {
+        "max_value": 15000000.0,
+        "fee": 20360.0
+      },
+      {
+        "max_value": 20000000.0,
+        "fee": 26360.0
+      },
+      {
+        "max_value": 25000000.0,
+        "fee": 32360.0
+      },
+      {
+        "max_value": 30000000.0,
+        "fee": 38360.0
+      },
+      {
+        "max_value": 35000000.0,
+        "fee": 44360.0
+      },
+      {
+        "max_value": 40000000.0,
+        "fee": 50360.0
+      },
+      {
+        "max_value": 45000000.0,
+        "fee": 56360.0
+      },
+      {
+        "max_value": 50000000.0,
+        "fee": 62360.0
+      },
+      {
+        "max_value": 60000000.0,
+        "fee": 74360.0
+      }
+    ],
+    "extrapolation_rate": 0.006
+  },
+  "kv_definitions": {
+    "21200": {
+      "description": "Beurkundungsverfahren",
+      "fee_type": "value_based",
+      "rate": 1.0,
+      "table": "B",
+      "min_fee": 120.0
+    },
+    "21201": {
+      "description": "Beurkundung bei verschiedenen Vertragsteilen",
+      "fee_type": "value_based",
+      "rate": 1.0,
+      "table": "B"
+    },
+    "22110": {
+      "description": "Vollzug im Grundbuch",
+      "fee_type": "value_based",
+      "rate": 0.5,
+      "table": "B",
+      "min_fee": 60.0,
+      "max_fee": 1000.0
+    },
+    "22114": {
+      "description": "Elektronischer Vollzug und XML-Strukturdaten",
+      "fee_type": "flat",
+      "flat_fee": 15.0
+    },
+    "22125": {
+      "description": "Betreuungstätigkeit (2,0)",
+      "fee_type": "value_based",
+      "rate": 2.0,
+      "table": "B",
+      "min_fee": 60.0
+    },
+    "22200": {
+      "description": "Treuhandauftrag",
+      "fee_type": "value_based",
+      "rate": 1.0,
+      "table": "B"
+    },
+    "23300": {
+      "description": "Grundschuldbestellung (0,5)",
+      "fee_type": "value_based",
+      "rate": 0.5,
+      "table": "B",
+      "min_fee": 60.0
+    },
+    "24102": {
+      "description": "Beratung",
+      "fee_type": "value_based",
+      "rate": 0.75,
+      "table": "B",
+      "max_fee": 1000.0
+    },
+    "25100": {
+      "description": "Beglaubigung",
+      "fee_type": "value_based",
+      "rate": 0.2,
+      "table": "B",
+      "min_fee": 20.0,
+      "max_fee": 750.0
+    },
+    "25200": {
+      "description": "Bescheinigung",
+      "fee_type": "flat",
+      "flat_fee": 30.0
+    },
+    "21100": {
+      "description": "Beurkundung einseitiger Willenserklärung",
+      "fee_type": "value_based",
+      "rate": 1.0,
+      "table": "B"
+    },
+    "21300": {
+      "description": "Beurkundung Erbvertrag / Ehegattentestament",
+      "fee_type": "value_based",
+      "rate": 1.0,
+      "table": "B"
+    },
+    "23200": {
+      "description": "Löschung einer Hypothek / Grundschuld (0,5)",
+      "fee_type": "value_based",
+      "rate": 0.5,
+      "table": "B",
+      "min_fee": 60.0
+    },
+    "24200": {
+      "description": "Vertretungsnachweis",
+      "fee_type": "value_based",
+      "rate": 0.5,
+      "table": "B",
+      "min_fee": 25.0,
+      "max_fee": 500.0
+    }
+  }
 }

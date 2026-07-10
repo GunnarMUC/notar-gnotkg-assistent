@@ -1,7 +1,6 @@
 """Dokumenten-Parser: PDF, DOCX, RTF, TXT mit OCR-Fallback."""
 
 from pathlib import Path
-from typing import Optional
 
 from loguru import logger
 
@@ -202,10 +201,11 @@ def _parse_pdf(file_path: Path) -> ParsedDocument:
 
 
 def _ocr_pdf(file_path: Path) -> str:
+    import io
+
     import fitz
     import pytesseract
     from PIL import Image
-    import io
 
     settings = get_settings()
     doc = fitz.open(str(file_path))
@@ -213,9 +213,7 @@ def _ocr_pdf(file_path: Path) -> str:
     for page in doc:
         pix = page.get_pixmap(dpi=250)
         img = Image.open(io.BytesIO(pix.tobytes("png")))
-        page_text = pytesseract.image_to_string(
-            img, lang=settings.app_ocr_lang
-        )
+        page_text = pytesseract.image_to_string(img, lang=settings.app_ocr_lang)
         text_parts.append(page_text)
     doc.close()
     return "\n".join(text_parts)
@@ -250,8 +248,7 @@ def parse_document(file_path: str | Path) -> ParsedDocument:
 
     if suffix not in parsers:
         raise ValueError(
-            f"Nicht unterstütztes Format '{suffix}'. "
-            f"Unterstützt: {', '.join(parsers.keys())}"
+            f"Nicht unterstütztes Format '{suffix}'. Unterstützt: {', '.join(parsers.keys())}"
         )
 
     file_hash = hash(path.name) % 100000
@@ -266,6 +263,5 @@ def parse_document(file_path: str | Path) -> ParsedDocument:
     except Exception as e:
         logger.error(f"Fehler beim Parsen von Dokument #{file_hash}: {type(e).__name__}")
         raise RuntimeError(
-            f"Fehler beim Parsen des Dokuments. "
-            f"Bitte überprüfen Sie das Dateiformat."
+            "Fehler beim Parsen des Dokuments. Bitte überprüfen Sie das Dateiformat."
         ) from e

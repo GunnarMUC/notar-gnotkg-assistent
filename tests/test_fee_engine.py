@@ -75,8 +75,8 @@ class TestFeeEngineTotals:
         ]
         total = engine.calculate_invoice_total(calcs, auslagen=5.0)
         assert total["total_fees"] == 1075.0  # 1060 + 15
-        assert total["total_net"] == 1080.0   # 1075 + 5
-        assert total["vat_amount"] == 205.2   # 1080 * 0.19
+        assert total["total_net"] == 1080.0  # 1075 + 5
+        assert total["vat_amount"] == 205.2  # 1080 * 0.19
         assert total["total_gross"] == 1285.2
 
 
@@ -102,3 +102,23 @@ class TestFeeEngineKvList:
         assert "21200" in kv_numbers
         assert "22114" in kv_numbers
         assert len(kv_numbers) >= 8
+
+
+class TestFeeEngineJsonLoader:
+    def test_loads_table_from_json(self, engine):
+        metadata = engine.get_table_metadata()
+        assert metadata["version"] == "GNotKG_Stand_2026-01-01_v1"
+        assert metadata["currency"] == "EUR"
+        assert metadata["table_name"] == "B"
+
+    def test_table_data_matches_hardcoded_legacy(self, engine):
+        # Sicherstellen, dass die JSON-Tabelle identische Werte liefert
+        assert engine._lookup_table_b(500) == 23.0
+        assert engine._lookup_table_b(1500) == 23.0
+        assert engine._lookup_table_b(1000000) == 2360.0
+
+    def test_missing_table_raises(self):
+        from core.fee_engine import FeeEngine, FeeEngineError
+
+        with pytest.raises(FeeEngineError):
+            FeeEngine(table_version="does_not_exist")

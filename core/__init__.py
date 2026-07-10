@@ -2,15 +2,15 @@
 
 from core.config import Settings, get_settings
 from core.models import (
-    NotaryProfile,
+    AuditLogEntry,
     ExtractedPosition,
     ExtractionResult,
+    FeeCalculation,
     FinalInvoicePosition,
     GeneratedInvoice,
-    AuditLogEntry,
-    ParsedDocument,
-    FeeCalculation,
     GnotkgStatus,
+    NotaryProfile,
+    ParsedDocument,
 )
 
 __all__ = [

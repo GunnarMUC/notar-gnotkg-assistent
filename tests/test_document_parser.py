@@ -1,17 +1,14 @@
 """Tests für den Document Parser."""
 
 import pytest
-from pathlib import Path
 
-from core.document_parser import parse_document, _strip_rtf
+from core.document_parser import _strip_rtf, parse_document
 from core.models import ExtractionQuality
 
 
 class TestParseTxt:
     def test_basic_txt(self):
-        doc = parse_document(
-            "Beispielurkunden/txt/01_Grundstueckskauf_Einfach_Einfamilienhaus.txt"
-        )
+        doc = parse_document("Beispielurkunden/txt/01_Grundstueckskauf_Einfach_Einfamilienhaus.txt")
         assert doc.pages >= 1
         assert len(doc.full_text) > 500
         assert doc.extraction_quality == ExtractionQuality.GOOD
@@ -28,17 +25,13 @@ class TestParseTxt:
 
 class TestParseRtf:
     def test_basic_rtf(self):
-        doc = parse_document(
-            "Beispielurkunden/rtf/01_Grundstueckskauf_Einfach_Einfamilienhaus.rtf"
-        )
+        doc = parse_document("Beispielurkunden/rtf/01_Grundstueckskauf_Einfach_Einfamilienhaus.rtf")
         assert doc.pages >= 1
         assert len(doc.full_text) > 500
         assert doc.extraction_quality == ExtractionQuality.GOOD
 
     def test_rtf_no_trailing_backslash(self):
-        doc = parse_document(
-            "Beispielurkunden/rtf/01_Grundstueckskauf_Einfach_Einfamilienhaus.rtf"
-        )
+        doc = parse_document("Beispielurkunden/rtf/01_Grundstueckskauf_Einfach_Einfamilienhaus.rtf")
         for line in doc.full_text.split("\n"):
             stripped = line.rstrip()
             if len(stripped) > 1:

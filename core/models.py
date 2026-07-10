@@ -1,14 +1,14 @@
 """Pydantic-Modelle für den Notar GNotKG Assistent."""
 
 from datetime import datetime
-from enum import Enum
-from typing import Literal, Optional
+from enum import StrEnum
+from typing import Literal
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
 
-class ExtractionQuality(str, Enum):
+class ExtractionQuality(StrEnum):
     GOOD = "good"
     OCR_FALLBACK = "ocr_fallback"
     POOR = "poor"
@@ -26,26 +26,24 @@ class NotaryProfile(BaseModel):
     name: str
     firm_name: str
     address: str
-    phone: Optional[str] = None
-    email: Optional[str] = None
+    phone: str | None = None
+    email: str | None = None
     bank_name: str
     iban: str
-    bic: Optional[str] = None
-    tax_number: Optional[str] = None
-    vat_id: Optional[str] = None
-    logo_path: Optional[str] = None
+    bic: str | None = None
+    tax_number: str | None = None
+    vat_id: str | None = None
+    logo_path: str | None = None
     updated_at: datetime = Field(default_factory=datetime.now)
 
 
 class ExtractedPosition(BaseModel):
-    kv_number: Optional[str] = Field(
+    kv_number: str | None = Field(
         default=None,
         description="KV-Nummer aus dem Kostenverzeichnis, z.B. '21200'",
     )
     description: str = Field(..., description="Beschreibung des Tatbestands")
-    business_value_eur: Optional[float] = Field(
-        default=None, description="Geschäftswert in EUR"
-    )
+    business_value_eur: float | None = Field(default=None, description="Geschäftswert in EUR")
     source_reference: str = Field(
         ..., description="Fundstelle im Dokument, z.B. 'Seite 3, Ziffer 4.1'"
     )
@@ -65,11 +63,11 @@ class ExtractionResult(BaseModel):
 class FinalInvoicePosition(BaseModel):
     kv_number: str
     description: str
-    business_value_eur: Optional[float] = None
+    business_value_eur: float | None = None
     fee_amount: float = 0.0
     source_reference: str = ""
     was_overridden: bool = False
-    override_reason: Optional[str] = None
+    override_reason: str | None = None
     calculation_details: str = ""
 
 
@@ -97,25 +95,25 @@ class AuditLogEntry(BaseModel):
     invoice_id: UUID
     timestamp: datetime = Field(default_factory=datetime.now)
     action: Literal["extraction", "edit", "confirmation", "generation"]
-    llm_model: Optional[str] = None
-    positions_before: Optional[list] = None
-    positions_after: Optional[list] = None
+    llm_model: str | None = None
+    positions_before: list | None = None
+    positions_after: list | None = None
     user: str = "Notar"
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class FeeCalculation(BaseModel):
     kv_number: str
     description: str
-    business_value: Optional[float] = None
+    business_value: float | None = None
     fee_amount: float = 0.0
     calculation_basis: str = ""
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class GnotkgStatus(BaseModel):
     local_version: str
-    remote_version: Optional[str] = None
+    remote_version: str | None = None
     is_current: bool = True
-    checked_at: Optional[datetime] = None
-    error: Optional[str] = None
+    checked_at: datetime | None = None
+    error: str | None = None

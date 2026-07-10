@@ -1,13 +1,16 @@
 """GNotKG-Aktualitätsprüfung via gesetze-im-internet.de."""
 
 import re
-from datetime import datetime, timezone
+from datetime import UTC, date, datetime
 
 import httpx
 from loguru import logger
 
 from core.config import get_settings
 from core.models import GnotkgStatus
+
+# Lokaler GNotKG-Stand (aus der implementierten Gebührentabelle)
+LOCAL_GNOTKG_DATE = date(2026, 1, 1)
 
 
 def check_gnotkg_version() -> GnotkgStatus:
@@ -18,8 +21,8 @@ def check_gnotkg_version() -> GnotkgStatus:
     """
     settings = get_settings()
     status = GnotkgStatus(
-        local_version="GNotKG_Stand_2026-01-01_v1",
-        checked_at=datetime.now(timezone.utc),
+        local_version=f"GNotKG_Stand_{LOCAL_GNOTKG_DATE.isoformat()}_v1",
+        checked_at=datetime.now(UTC),
     )
 
     if not settings.app_gnotkg_check_enabled:
@@ -34,36 +37,25 @@ def check_gnotkg_version() -> GnotkgStatus:
         )
         response.raise_for_status()
 
-        # Suche nach "Stand:" gefolgt von Datum oder Änderungsinfo
-        match = re.search(
-            r"Stand(?: der letzten Änderung)?[:\s]+.*?(\d{2}\.\d{2}\.\d{4})",
-            response.text,
-        )
-        if match:
-            status.remote_version = match.group(1)
-        else:
-            # Alternative: "Zuletzt geändert durch ... vom DD.MM.YYYY"
-            match = re.search(
-                r"zuletzt geändert.*?(\d{1,2}\.\d{1,2}\.\d{4})",
-                response.text,
-                re.IGNORECASE,
-            )
-            if match:
-                status.remote_version = match.group(1)
-            else:
-                logger.warning("Konnte GNotKG-Version nicht aus der Webseite extrahieren")
-                status.error = "Konnte Versionsdatum nicht extrahieren"
-                return status
+        remote_date_str = _extract_remote_date(response.text)
+        if remote_date_str is None:
+            logger.warning("Konnte GNotKG-Version nicht aus der Webseite extrahieren")
+            status.error = "Konnte Versionsdatum nicht extrahieren"
+            return status
 
-        # Versionsvergleich (vereinfacht)
-        if status.remote_version:
-            local_year = 2026
-            remote_year = _extract_year(status.remote_version)
-            status.is_current = remote_year >= local_year
-            logger.info(
-                f"GNotKG-Check: lokal={local_year}, "
-                f"remote={status.remote_version}, aktuell={status.is_current}"
-            )
+        status.remote_version = remote_date_str
+        remote_date = _parse_date(remote_date_str)
+
+        if remote_date is None:
+            status.error = f"Ungültiges Datumformat: {remote_date_str}"
+            return status
+
+        # Aktuell = remote Stand ist nicht neuer als lokaler Stand
+        status.is_current = remote_date <= LOCAL_GNOTKG_DATE
+        logger.info(
+            f"GNotKG-Check: lokal={LOCAL_GNOTKG_DATE}, "
+            f"remote={remote_date}, aktuell={status.is_current}"
+        )
 
     except httpx.ConnectError:
         logger.warning("Keine Internetverbindung – GNotKG-Check übersprungen")
@@ -78,12 +70,29 @@ def check_gnotkg_version() -> GnotkgStatus:
     return status
 
 
-def _extract_year(date_str: str) -> int:
-    """Extrahiert das Jahr aus einem Datumstring (DD.MM.YYYY)."""
+def _extract_remote_date(html: str) -> str | None:
+    """Extrahiert das Versionsdatum aus der gesetze-im-internet.de-Seite."""
+    match = re.search(
+        r"Stand(?: der letzten Änderung)?[:\s]+.*?(\d{2}\.\d{2}\.\d{4})",
+        html,
+    )
+    if match:
+        return match.group(1)
+
+    match = re.search(
+        r"zuletzt geändert.*?(\d{1,2}\.\d{1,2}\.\d{4})",
+        html,
+        re.IGNORECASE,
+    )
+    if match:
+        return match.group(1)
+
+    return None
+
+
+def _parse_date(date_str: str) -> date | None:
+    """Parst ein Datum im Format DD.MM.YYYY."""
     try:
-        parts = date_str.strip().split(".")
-        if len(parts) >= 3:
-            return int(parts[-1])
-    except (ValueError, IndexError):
-        pass
-    return 0
+        return datetime.strptime(date_str.strip(), "%d.%m.%Y").date()
+    except ValueError:
+        return None

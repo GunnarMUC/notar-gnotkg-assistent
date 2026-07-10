@@ -1,9 +1,7 @@
 """Tests für den Invoice Generator und Excel Logger."""
 
-from datetime import datetime
-
-from core.invoice_generator import generate_invoice
 from core.excel_logger import create_audit_log
+from core.invoice_generator import generate_invoice
 
 
 class TestInvoiceGenerator:
@@ -25,9 +23,7 @@ class TestInvoiceGenerator:
             "bank_name": "Testbank",
             "iban": "DE12345678901234567890",
         }
-        content, invoice = generate_invoice(
-            positions, notary, output_format="txt"
-        )
+        content, invoice = generate_invoice(positions, notary, output_format="txt")
         text = content.decode("utf-8")
         assert "HONORARRECHNUNG" in text
         assert "Dr. Test" in text
@@ -52,9 +48,7 @@ class TestInvoiceGenerator:
             "bank_name": "Testbank",
             "iban": "DE1234567890",
         }
-        content, invoice = generate_invoice(
-            positions, notary, output_format="docx"
-        )
+        content, invoice = generate_invoice(positions, notary, output_format="docx")
         assert len(content) > 100
         assert content[:2] == b"PK"  # DOCX/ZIP magic bytes
         assert invoice.total_net == 15.0
@@ -77,9 +71,7 @@ class TestInvoiceGenerator:
             "bank_name": "B",
             "iban": "I",
         }
-        content, invoice = generate_invoice(
-            positions, notary, output_format="rtf"
-        )
+        content, invoice = generate_invoice(positions, notary, output_format="rtf")
         text = content.decode("cp1252", errors="replace")
         assert "HONORARRECHNUNG" in text
         assert r"{\rtf1" in text
@@ -87,10 +79,9 @@ class TestInvoiceGenerator:
 
 class TestExcelLogger:
     def test_create_audit_log(self):
-        from core.models import NotaryProfile, GeneratedInvoice, FinalInvoicePosition
-        profile = NotaryProfile(
-            name="T", firm_name="K", address="A", bank_name="B", iban="I"
-        )
+        from core.models import FinalInvoicePosition, GeneratedInvoice, NotaryProfile
+
+        profile = NotaryProfile(name="T", firm_name="K", address="A", bank_name="B", iban="I")
         positions = [
             FinalInvoicePosition(
                 kv_number="21200",

@@ -1,11 +1,9 @@
 """Excel-Logger – Revisionssicheres Traceability-Log pro Rechnung."""
 
 import io
-from datetime import datetime
 
-import pandas as pd
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
+from openpyxl.styles import Alignment, Font, PatternFill
 
 from core.models import GeneratedInvoice
 
@@ -43,7 +41,7 @@ def create_audit_log(invoice: GeneratedInvoice) -> bytes:
     ws["A8"] = "Summen"
     ws["A8"].font = Font(bold=True)
     ws["A9"] = f"Nettobetrag: {invoice.total_net:,.2f} €"
-    ws["A10"] = f"Umsatzsteuer ({invoice.vat_rate*100:.0f} %): {invoice.vat_amount:,.2f} €"
+    ws["A10"] = f"Umsatzsteuer ({invoice.vat_rate * 100:.0f} %): {invoice.vat_amount:,.2f} €"
     ws["A11"] = f"Gesamtbetrag: {invoice.total_gross:,.2f} €"
     ws["A11"].font = Font(bold=True, color="1F4E79")
 
@@ -102,7 +100,8 @@ def create_audit_log(invoice: GeneratedInvoice) -> bytes:
     ws3.cell(row=2, column=1, value=invoice.created_at.isoformat())
     ws3.cell(row=2, column=2, value="Rechnung erstellt")
     ws3.cell(
-        row=2, column=3,
+        row=2,
+        column=3,
         value=f"{len(invoice.positions)} Positionen, "
         f"Gesamt: {invoice.total_gross:,.2f} €, "
         f"Fee-Engine: {invoice.fee_engine_version}",

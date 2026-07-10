@@ -2,13 +2,13 @@
 
 import json
 from pathlib import Path
+from typing import Any, cast
 
 import ollama
 from loguru import logger
 
 from core.config import get_settings
 from core.models import ExtractedPosition, ExtractionResult
-
 
 _PROMPT_CACHE: str | None = None
 
@@ -19,6 +19,7 @@ def _load_prompt(version: str = "v1") -> str:
         return _PROMPT_CACHE
 
     import re
+
     if not re.match(r"^v\d+$", version):
         raise ValueError(f"Ungültige Prompt-Version: {version}")
 
@@ -72,8 +73,7 @@ Extrahiere jetzt die relevanten Informationen für die GNotKG-Honorarrechnung.""
     for attempt in range(1, max_retries + 2):
         try:
             logger.info(
-                f"LLM-Aufruf (Versuch {attempt}): Modell={model}, "
-                f"Textlänge={len(text)} Zeichen"
+                f"LLM-Aufruf (Versuch {attempt}): Modell={model}, Textlänge={len(text)} Zeichen"
             )
 
             response = client.chat(
@@ -90,6 +90,8 @@ Extrahiere jetzt die relevanten Informationen für die GNotKG-Honorarrechnung.""
             )
 
             raw = response.message.content
+            if raw is None:
+                raw = ""
 
             data = _parse_json_response(raw)
 
@@ -109,8 +111,7 @@ Extrahiere jetzt die relevanten Informationen für die GNotKG-Honorarrechnung.""
                         continue
                     if kv_number and kv_number not in valid_kv_numbers:
                         logger.info(
-                            f"Unbekannte KV-Nummer vom LLM, "
-                            f"wird trotzdem akzeptiert: {kv_number}"
+                            f"Unbekannte KV-Nummer vom LLM, wird trotzdem akzeptiert: {kv_number}"
                         )
                     positions.append(
                         ExtractedPosition(
@@ -158,10 +159,14 @@ Extrahiere jetzt die relevanten Informationen für die GNotKG-Honorarrechnung.""
                 ) from e
             raise
 
+    # Sollte nie erreicht werden; alle Schleifendurchläufe returnen oder raisen.
+    raise RuntimeError("LLM-Extraktion konnte nicht abgeschlossen werden.")
+
 
 def _get_valid_kv_numbers() -> set[str]:
     try:
         from core.fee_engine import FeeEngine
+
         return set(FeeEngine().get_available_kv_numbers())
     except Exception:
         return set()
@@ -185,4 +190,4 @@ def _parse_json_response(raw: str) -> dict:
     if start >= 0 and end > start:
         raw = raw[start : end + 1]
 
-    return json.loads(raw)
+    return cast(dict[str, Any], json.loads(raw))

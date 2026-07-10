@@ -2,12 +2,10 @@
 
 from core.config import get_settings
 from core.models import (
-    NotaryProfile,
     ExtractedPosition,
-    ExtractionResult,
-    FinalInvoicePosition,
-    GeneratedInvoice,
     FeeCalculation,
+    GeneratedInvoice,
+    NotaryProfile,
 )
 
 
@@ -56,9 +54,7 @@ class TestModels:
         assert c.fee_amount == 354.0
 
     def test_generated_invoice_defaults(self):
-        p = NotaryProfile(
-            name="T", firm_name="K", address="A", bank_name="B", iban="I"
-        )
+        p = NotaryProfile(name="T", firm_name="K", address="A", bank_name="B", iban="I")
         invoice = GeneratedInvoice(notary=p)
         assert invoice.vat_rate == 0.19
         assert invoice.total_gross == 0.0

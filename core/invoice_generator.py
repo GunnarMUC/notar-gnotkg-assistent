@@ -25,18 +25,36 @@ def generate_invoice(
 
     if output_format == "docx":
         content = _generate_docx(
-            final_positions, notary, now, total_net, vat_amount, total_gross,
-            original_document, fee_engine_version,
+            final_positions,
+            notary,
+            now,
+            total_net,
+            vat_amount,
+            total_gross,
+            original_document,
+            fee_engine_version,
         )
     elif output_format == "rtf":
         content = _generate_rtf(
-            final_positions, notary, now, total_net, vat_amount, total_gross,
-            original_document, fee_engine_version,
+            final_positions,
+            notary,
+            now,
+            total_net,
+            vat_amount,
+            total_gross,
+            original_document,
+            fee_engine_version,
         )
     else:
         content = _generate_txt(
-            final_positions, notary, now, total_net, vat_amount, total_gross,
-            original_document, fee_engine_version,
+            final_positions,
+            notary,
+            now,
+            total_net,
+            vat_amount,
+            total_gross,
+            original_document,
+            fee_engine_version,
         )
 
     positions = []
@@ -92,8 +110,8 @@ def _generate_docx(
     fee_version: str,
 ) -> bytes:
     from docx import Document
-    from docx.shared import Cm, Pt
     from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Cm, Pt
 
     doc = Document()
 
@@ -189,6 +207,7 @@ def _generate_docx(
     run_disc.italic = True
 
     import io
+
     buffer = io.BytesIO()
     doc.save(buffer)
     return buffer.getvalue()
@@ -255,8 +274,14 @@ def _generate_rtf(
 ) -> bytes:
     # RTF als einfaches Text-RTF
     text = _generate_txt(
-        positions, notary, now, total_net, vat, total_gross,
-        original_document, fee_version,
+        positions,
+        notary,
+        now,
+        total_net,
+        vat,
+        total_gross,
+        original_document,
+        fee_version,
     ).decode("utf-8")
 
     rtf = "{\\rtf1\\ansi\\deff0\n"
