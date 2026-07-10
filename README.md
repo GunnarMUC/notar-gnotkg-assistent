@@ -1,5 +1,14 @@
 # Notar GNotKG Assistent – Lokale App für deutsche Notare
 
+[![CI](https://github.com/GunnarMUC/notar-gnotkg-assistent/actions/workflows/ci.yml/badge.svg)](https://github.com/GunnarMUC/notar-gnotkg-assistent/actions)
+[![Security Audit](https://img.shields.io/badge/security%20audit-passed-brightgreen)](SECURITY_AUDIT_REPORT.md)
+[![Semgrep](https://img.shields.io/badge/semgrep-0%20findings-brightgreen)](SECURITY_AUDIT_REPORT.md)
+[![Gitleaks](https://img.shields.io/badge/gitleaks-0%20leaks-brightgreen)](SECURITY_AUDIT_REPORT.md)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-lightgrey)](https://www.apple.com/mac/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
+[![Status](https://img.shields.io/badge/status-MVP%20ready-success)](UMSETZUNGSREPORT.md)
+
 > **Lokale, DSGVO-konforme Desktop-App zur Erstellung GNotKG-konformer Honorarrechnungen aus Urkunden mit Hilfe eines lokalen LLMs (Ollama).**
 
 **Ziel**: Schlanke, sichere, offline-fähige Assistenz-App für Notare. Die App extrahiert relevante Werte aus Urkunden (PDF, DOCX, RTF, TXT), schlägt passende Positionen aus dem Kostenverzeichnis vor, berechnet Gebühren **deterministisch exakt** nach aktueller GNotKG und erzeugt prüfbare Honorarrechnungen (RTF/DOCX/TXT) sowie ein vollständiges Excel-Traceability-Log.

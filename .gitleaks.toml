@@ -1,0 +1,14 @@
+# Gitleaks configuration for Notar GNotKG Assistent
+
+title = "Notar GNotKG Assistent – Gitleaks Config"
+
+[allowlist]
+  description = "Allowlist for known non-secret patterns"
+
+  [[allowlist.paths]]
+    description = "Example documents contain fake data"
+    match = "Beispielurkunden/**/*"
+
+  [[allowlist.paths]]
+    description = "GNotKG law text (public data)"
+    match = "Gesetze/**/*"
