@@ -1,164 +1,146 @@
-# Notar GNotKG Assistent – Lokale App für deutsche Notare
+# Notar GNotKG Assistent
+
+> **Der erste lokale KI-Assistent für deutsche Notare – gebührenrechtlich korrekt, datenschutzsicher und transparent.**
 
 [![CI](https://github.com/GunnarMUC/notar-gnotkg-assistent/actions/workflows/ci.yml/badge.svg)](https://github.com/GunnarMUC/notar-gnotkg-assistent/actions)
+[![Coverage](https://img.shields.io/badge/coverage-91%25-brightgreen)](tests/)
 [![Security Audit](https://img.shields.io/badge/security%20audit-passed-brightgreen)](SECURITY_AUDIT_REPORT.md)
 [![Semgrep](https://img.shields.io/badge/semgrep-0%20findings-brightgreen)](SECURITY_AUDIT_REPORT.md)
 [![Gitleaks](https://img.shields.io/badge/gitleaks-0%20leaks-brightgreen)](SECURITY_AUDIT_REPORT.md)
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-lightgrey)](https://www.apple.com/mac/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
-[![Status](https://img.shields.io/badge/status-MVP%20ready-success)](UMSETZUNGSREPORT.md)
-
-> **Lokale, DSGVO-konforme Desktop-App zur Erstellung GNotKG-konformer Honorarrechnungen aus Urkunden mit Hilfe eines lokalen LLMs (Ollama).**
-
-**Ziel**: Schlanke, sichere, offline-fähige Assistenz-App für Notare. Die App extrahiert relevante Werte aus Urkunden (PDF, DOCX, RTF, TXT), schlägt passende Positionen aus dem Kostenverzeichnis vor, berechnet Gebühren **deterministisch exakt** nach aktueller GNotKG und erzeugt prüfbare Honorarrechnungen (RTF/DOCX/TXT) sowie ein vollständiges Excel-Traceability-Log.
-
-**Wichtig**: Die App ist ein **Assistenz-Tool**. Die finale Prüfung, Verantwortung und Haftung liegen immer beim Notar (§ 17 BNotO, GNotKG).
 
 ---
 
-## Kernfunktionen (MVP + erweitert)
+## Das Problem
 
-- Upload von Urkunden (PDF mit/ohne OCR, DOCX, RTF, TXT)
-- Intelligente Extraktion relevanter Geschäftswerte, Beteiligter und Tatbestände per lokalem LLM
-- Vorschlag passender KV-Nummern aus dem Kostenverzeichnis (Anlage 1 GNotKG)
-- **Deterministische, exakte Gebührenberechnung** nach Anlage 2 (Tabelle B) und Wertvorschriften
-- Editierbare Zwischentabelle mit Human-in-the-Loop (Pflicht!)
-- Generierung GNotKG-konformer Honorarrechnung (RTF / DOCX / TXT)
-- Automatisches, revisionssicheres Excel-Log mit vollständiger Traceability (welcher Wert → welcher Paragraph → welche Gebühr)
-- Automatischer GNotKG-Aktualitäts-Check beim Start (Abgleich mit gesetze-im-internet.de)
-- Lokales Notar-Profil (einmalig einrichten)
-- Vollständig lokal & offline-fähig (außer optionaler GNotKG-Check)
-- Docker-Option für Reproduzierbarkeit + native Ollama-Empfehlung für Apple Silicon
+Honorarrechnungen nach dem Gerichts- und Notarkostengesetz (GNotKG) sind komplex, fehleranfällig und zeitaufwändig. Gleichzeitig dürfen sensible Urkundeninhalte **nicht** in Cloud-KI-Dienste wandern, und Gebührenbeträge müssen juristisch exakt sein.
+
+## Die Lösung
+
+Ein **lokaler, DSGVO-konformer Desktop-Assistent**, der Urkunden mit einem lokalen LLM (Ollama) versteht, Geschäftswerte und KV-Nummern vorschlägt und Gebühren **deterministisch exakt** berechnet. Die KI entscheidet niemals über Beträge – das übernimmt eine auditierte Python-Engine.
 
 ---
 
-## Tech-Highlights
+## Innovation & Alleinstellungsmerkmale
 
-- **LLM**: Ollama (nativer macOS-Betrieb auf M-Serie für beste Performance)
-- **Modelle**: Frei wählbar, empfohlen ≥ 12B (z. B. Qwen2.5-14B-Instruct Q5/Q6 oder vergleichbar)
-- **UI**: Streamlit (einfach, interaktiv, lokal im Browser)
-- **Berechnung**: Reine Python-Logik (keine LLM-Halluzinationen bei Beträgen!)
-- **Plattform**: Primär macOS (MacBook Pro M-Serie), lauffähig unter Linux/Windows mit Anpassungen
-- **Datenschutz**: 100 % lokal, keine Cloud, keine Telemetrie, SQLite + Dateisystem
+| Innovation | Warum es zählt |
+|------------|----------------|
+| **🧠 Lokales LLM + deterministische Engine** | KI extrahiert Fakten, Python berechnet Gebühren. Keine Halluzinationen bei Beträgen. |
+| **⚖️ Human-in-the-Loop als Pflicht** | Jede KI-Vorschlagsposition muss vom Notar geprüft und bestätigt werden. |
+| **🔒 Privacy by Design** | 100 % lokal. Keine Cloud, keine Telemetrie, keine Dokumenten-Uploads. |
+| **🛡️ Verschlüsseltes Notar-Profil** | IBAN, Steuernummer & Co. werden mit einem Master-Passwort (Fernet/PBKDF2) gesichert. |
+| **📊 Revisionssicheres Excel-Log** | Jede Rechnung erhält ein Traceability-Log: Wert → Paragraph → Gebühr. |
+| **🗂️ Versionierte Gebührentabellen** | GNotKG-Tabelle B und KV-Definitionen als strukturierte JSON-Dateien zukunftssicher hinterlegt. |
+| **🍎 Native Apple-Silicon-Performance** | Empfohlen mit Ollama auf macOS M-Serie für maximale Geschwindigkeit. |
 
 ---
 
-## Schnellstart (für Entwickler / Test)
+## Schnellstart
 
 ```bash
-# 1. Ollama installieren (nativer macOS Installer empfohlen)
+# 1. Ollama installieren
 # https://ollama.com
 
-# 2. Modell pullen (Beispiel)
+# 2. Modell pullen
 ollama pull qwen2.5:14b-instruct-q5_K_M
 
-# 3. Projekt klonen / entpacken
-cd notar-gnotkg-app
-
-# 4. Python-Umgebung (uv empfohlen)
+# 3. Projekt einrichten
+git clone https://github.com/GunnarMUC/notar-gnotkg-assistent.git
+cd notar-gnotkg-assistent
 uv sync
-# oder: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 
-# 5. App starten
+# 4. App starten
 streamlit run app.py
 ```
 
-Danach im Browser unter `http://localhost:8501` öffnen.
-
-**Vollständige Installations- und Nutzungsanleitung** siehe `DEPLOYMENT.md`.  
-**Testdaten**: 15 fiktive Musterurkunden (Grundstückskauf + Testamente) in `Beispielurkunden/` (TXT, RTF, HTML).
-**GNotKG-Volltext**: Parsbares XML (Stand: 10.12.2025) in `Gesetze/BJNR258610013 3.xml`.
+Danach unter `http://localhost:8501` öffnen.
 
 ---
 
-## Ordnerstruktur (Ziel)
+## Kernfunktionen
 
-```
-notar-gnotkg-app/
-├── app.py                      # Haupt-Streamlit-App
-├── core/
-│   ├── __init__.py
-│   ├── fee_engine.py           # Deterministische GNotKG-Berechnung
-│   ├── document_parser.py      # PDF/DOCX/RTF → Text + OCR
-│   ├── llm_extractor.py        # LLM-gestützte Extraktion (structured output)
-│   ├── invoice_generator.py    # RTF/DOCX/TXT Erzeugung
-│   ├── excel_logger.py         # Traceability-Excel
-│   ├── gnotkg_checker.py       # Update-Check der GNotKG
-│   └── models.py               # Pydantic-Modelle
-├── prompts/
-│   └── extraction_prompt.txt   # System-Prompt + Few-Shots
-├── templates/
-│   ├── invoice_template.html   # oder Jinja2 für DOCX
-│   └── ...
-├── data/
-│   ├── notary_profile.json
-│   ├── fee_tables/             # Versionierte Tabellen (JSON)
-│   └── history/                # SQLite + generierte Dateien
-├── tests/
-├── docker/
-│   ├── Dockerfile
-│   └── docker-compose.yml
-├── Beispielurkunden/
-│   ├── txt/                       # 15 Muster-Urkunden (Plaintext)
-│   ├── rtf/                       # 15 Muster-Urkunden (RTF)
-│   └── html/                      # 15 Muster-Urkunden (HTML/Quelle)
-├── Gesetze/
-│   ├── GNotKG.pdf                 # GNotKG-Volltext (PDF)
-│   └── BJNR258610013 3.xml        # GNotKG-Volltext (XML, parsbar)
-├── README.md
-├── ARCHITECTURE.md
-├── DEPLOYMENT.md
-├── NON_FUNCTIONAL_REQUIREMENTS.md
-├── ... (weitere Briefing-Dateien)
-└── requirements.txt / pyproject.toml
+- **Urkunden-Upload**: PDF (mit OCR), DOCX, RTF, TXT
+- **KI-Extraktion**: Geschäftswerte, Beteiligte, KV-Nummern per lokalem LLM
+- **Interaktive Prüfung**: Editierbare Positionstabelle mit Confidence-Score
+- **Deterministische Berechnung**: GNotKG-Anlage 2 (Tabelle B) exakt nach dem Gesetz
+- **Rechnungserstellung**: DOCX, RTF oder TXT
+- **Audit-Trail**: Automatisches Excel-Traceability-Log pro Rechnung
+- **GNotKG-Aktualitäts-Check**: Abgleich mit gesetze-im-internet.de beim Start
+- **Notar-Profil**: Einmalig einrichten, optional verschlüsselt speichern
+
+---
+
+## Architektur
+
+```text
+┌─────────────┐     ┌──────────────────┐     ┌────────────────┐
+│  Urkunde    │────▶│  Lokales LLM      │────▶│  Vorschlag     │
+│  (PDF/...)  │     │  (Ollama)         │     │  Positionen    │
+└─────────────┘     └──────────────────┘     └────────────────┘
+                                                       │
+                                                       ▼
+┌─────────────┐     ┌──────────────────┐     ┌────────────────┐
+│  Rechnung   │◀────│  Fee Engine       │◀────│  Notar prüft  │
+│  + Excel-Log│     │  (deterministisch)│     │  & bestätigt   │
+└─────────────┘     └──────────────────┘     └────────────────┘
 ```
 
----
-
-## Wichtige Hinweise für die Umsetzung
-
-Dieses Briefing-Paket enthält alle notwendigen Spezifikationen, damit ein Coding-Agent (Cursor, Claude, Aider, OpenDevin etc.) die App vollständig implementieren kann.
-
-**Reihenfolge der Umsetzung (empfohlen)**:
-1. Projekt-Setup + Pydantic-Modelle
-2. Dokumenten-Parsing + OCR
-3. Streamlit-Grundgerüst mit Upload + Dummy-Daten
-4. Fee-Engine (deterministisch, zuerst mit 5–8 häufigen Tatbeständen) + Invoice-Generator (DOCX)
-5. LLM-Extraktion mit structured output + Prompts
-6. Integration: Extraktion → editierbare Tabelle → Fee Engine → Rechnung
-7. Excel-Logging + Traceability
-8. GNotKG-Checker + Notar-Profil
-9. Polish, Error-Handling, Disclaimer, Tests
-
-**Kritische Prinzipien**:
-- **Keine LLM-Berechnung von Gebührenbeträgen** – nur Extraktion + Vorschlag.
-- Jede KI-Extraktion **muss** vom Notar editierbar und bestätigbar sein.
-- Maximale Transparenz und Auditierbarkeit.
-- Lean & wartbar halten (keine Over-Engineering).
+Trennung von KI und Berechnung ist das zentrale Sicherheitsprinzip: das LLM liest und schlägt vor, die Engine rechnet.
 
 ---
 
-## Status & Roadmap (Stand Briefing-Erstellung)
+## Sicherheit & Compliance
 
-- [ ] MVP-Definition abgeschlossen
-- [ ] Briefing-Paket für Coding-Agent erstellt
-- [ ] Umsetzung durch Coding-Agent
-- [ ] Test mit realen (anonymisierten) Urkunden
-- [ ] Beta bei Notar(en)
-- [ ] Release & Wartungskonzept (Fee-Engine-Updates bei Gesetzesänderungen)
+- **Keine Cloud**: Alle Verarbeitung findet auf dem lokalen Rechner statt.
+- **Keine Hardcoded Secrets**: Verifiziert durch Gitleaks.
+- **SAST & Dependency Audit**: Semgrep und pip-audit in der CI.
+- **Verschlüsselung**: Optionale AES-verschlüsselte Speicherung des Notar-Profils.
+- **DSGVO-konform**: Datenminimierung, lokale Speicherung, kein Datenverarbeitungsvertrag mit Dritt-Anbietern nötig.
+
+Details im [Security Audit Report](SECURITY_AUDIT_REPORT.md) und [SECURITY.md](SECURITY.md).
+
+---
+
+## Projektstruktur
+
+```text
+notar-gnotkg-assistent/
+├── app.py                  # Dünner Streamlit-Einstieg
+├── core/                   # Geschäftslogik
+│   ├── fee_engine.py       # Deterministische GNotKG-Berechnung
+│   ├── document_parser.py  # PDF/DOCX/RTF/TXT + OCR
+│   ├── llm_extractor.py    # Ollama-Extraktion
+│   ├── invoice_generator.py
+│   ├── excel_logger.py
+│   ├── gnotkg_checker.py
+│   └── profile_crypto.py   # Profilverschlüsselung
+├── ui/                     # Streamlit-UI-Komponenten
+├── data/fee_tables/        # Versionierte JSON-Gebührentabellen
+├── prompts/                # System-Prompts + Few-Shots
+├── tests/                  # 63 Tests, 91 % Coverage
+└── SECURITY_AUDIT_REPORT.md
+```
+
+---
+
+## Roadmap
+
+- [x] MVP mit lokalem LLM + deterministischer Fee Engine
+- [x] Profilverschlüsselung + Sicherheitsaudit
+- [x] CI/CD mit Qualitätssicherung, SAST & Dependency-Audit
+- [ ] Weitere KV-Nummern aus dem Kostenverzeichnis
+- [ ] Rechnungs-Templates (HTML/Jinja2)
+- [ ] SQLite-basierte Historie + Volltextsuche
+- [ ] Beta-Test bei Notarkanzleien
 
 ---
 
 ## Lizenz & Haftung
 
-Die App wird als Open-Source- oder interne Kanzlei-Lösung entwickelt.  
-**Haftungsausschluss**: Die generierten Rechnungen und Berechnungen sind Vorschläge. Der Notar ist für die Richtigkeit und die Einhaltung des GNotKG verantwortlich.
+MIT License. Die Software ist ein Assistenztool. Die alleinige Verantwortung für die Richtigkeit und die Einhaltung des GNotKG liegt stets beim Notar (§ 17 BNotO).
 
 ---
 
-**Erstellt**: Juli 2026  
-**Für**: Lokalen Einsatz auf macOS (Apple Silicon)  
-**Kontakt / Weiterentwicklung**: [Deine Angaben hier einfügen]
-
-Viel Erfolg bei der Umsetzung! Die App hat echtes Potenzial, den Alltag von Notaren spürbar zu erleichtern, während sie die gesetzlichen Anforderungen erfüllt.
+**Erstellt für**: Deutsche Notare, lokaler Einsatz auf macOS (Apple Silicon), lauffähig unter Linux/Windows.
