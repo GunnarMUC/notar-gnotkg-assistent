@@ -13,7 +13,7 @@
 
 **Ziel**: Schlanke, sichere, offline-fähige Assistenz-App für Notare. Die App extrahiert relevante Werte aus Urkunden (PDF, DOCX, RTF, TXT), schlägt passende Positionen aus dem Kostenverzeichnis vor, berechnet Gebühren **deterministisch exakt** nach aktueller GNotKG und erzeugt prüfbare Honorarrechnungen (RTF/DOCX/TXT) sowie ein vollständiges Excel-Traceability-Log.
 
-**Wichtig**: Die App ist ein **Assistenz-Tool**. Die finale Prüfung, Verantwortung und Haftung liegt immer beim Notar (§ 17 BNotO, GNotKG).
+**Wichtig**: Die App ist ein **Assistenz-Tool**. Die finale Prüfung, Verantwortung und Haftung liegen immer beim Notar (§ 17 BNotO, GNotKG).
 
 ---
 
