@@ -1,0 +1,15 @@
+Verfügbare LLMs
+
+qwen2.5:7b                              845dbda0ea48    4.7 GB    3 weeks ago     
+qwen2.5:14b                             7cdf5a0187d5    9.0 GB    3 weeks ago     
+codestral:latest                        0898a8b286d5    12 GB     3 months ago    
+gemma4:e4b                              c6eb396dbd59    9.6 GB    3 months ago    
+nomic-embed-text:latest                 0a109f422b47    274 MB    3 months ago    
+sroecker/sauerkrautlm-7b-hero:latest    ba11aa38e2cf    4.4 GB    3 months ago    
+klinik-nemo:latest                      95f483bbb028    7.1 GB    3 months ago    
+mistral-nemo:latest                     e7e06d107c6c    7.1 GB    3 months ago    
+tinyllama:1.1b                          2644915ede35    637 MB    3 months ago    
+mistral:7b                              6577803aa9a0    4.4 GB    3 months ago    
+deepseek-r1:latest                      6995872bfe4c    5.2 GB    3 months ago    
+mistral:7b-instruct-q5_K_M              8397c99c426f    5.1 GB    3 months ago    
+qwen2.5:14b-instruct-q4_K_M             7cdf5a0187d5    9.0 GB    3 months ago 

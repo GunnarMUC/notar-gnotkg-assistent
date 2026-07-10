@@ -1,0 +1,47 @@
+# docker-compose.yml – Notar GNotKG Assistent
+# App im Container, Ollama läuft nativ auf dem Host (localhost:11434)
+
+version: "3.9"
+
+services:
+  notar-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: notar-gnotkg-app
+    ports:
+      - "8501:8501"
+    volumes:
+      # Daten persistieren außerhalb des Containers
+      - ../data:/app/data
+      # Audit-Logs und History persistieren
+      - ../history:/app/history
+      # Optional: Beispielurkunden als Read-Only einbinden
+      - ../Beispielurkunden:/app/Beispielurkunden:ro
+      # Optional: GNotKG-XML als Read-Only
+      - ../Gesetze:/app/Gesetze:ro
+    environment:
+      # Verbindung zum Host-Ollama (localhost des Hosts)
+      - OLLAMA_HOST=host.docker.internal:11434
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+    extra_hosts:
+      # host.docker.internal für macOS und Windows
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    # Ressourcen-Begrenzung
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G
+
+# Hinweise für Apple Silicon (M-Serie):
+# - Ollama läuft nativ auf dem Mac, NICHT im Container (Metal-Beschleunigung)
+# - Der Container verbindet sich via host.docker.internal:11434 zum Host-Ollama
+# - Für Linux-Hosts: host.docker.internal funktioniert ab Docker 20.10+
+# - Optional: Netzwerk-Modus "host" für Linux (nicht macOS):
+#   network_mode: host  (dann OLLAMA_HOST=localhost:11434)

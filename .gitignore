@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Sensible Daten – niemals committen!
+data/notary_profile.json
+data/notar_app.db
+data/generated_invoices/
+history/
+
+# Environment
+.env
+*.env.local
+
+# Ollama
+.ollama/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Test-Artifakte
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker
+docker-compose.override.yml
+
+# Backup-Dateien
+*.bak
+*.tmp

@@ -1,0 +1,49 @@
+[project]
+name = "notar-gnotkg-assistent"
+version = "0.1.0"
+description = "Lokale, DSGVO-konforme Desktop-App zur Erstellung GNotKG-konformer Honorarrechnungen mit lokalem LLM (Ollama)"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+    { name = "GunnarMUC" }
+]
+keywords = ["notar", "gnotkg", "gebührenrechnung", "honorarrechnung", "ollama", "streamlit"]
+
+dependencies = [
+    "streamlit>=1.38,<2.0",
+    "ollama>=0.3",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "pymupdf>=1.24",
+    "pytesseract>=0.3.10",
+    "python-docx>=1.1",
+    "pandas>=2.2",
+    "openpyxl>=3.1",
+    "jinja2>=3.1",
+    "httpx>=0.27",
+    "loguru>=0.7",
+    "sqlalchemy>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.14",
+    "pytest-cov>=5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0",
+    "pytest-mock>=3.14",
+    "pytest-cov>=5.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
