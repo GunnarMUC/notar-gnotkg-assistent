@@ -185,6 +185,27 @@ class FeeEngine:
             )
 
         if fee_type == "value_based" and business_value is not None:
+            if business_value <= 0:
+                return FeeCalculation(
+                    kv_number=kv_number,
+                    description=description,
+                    business_value=business_value,
+                    fee_amount=0.0,
+                    calculation_basis="Ungültiger Geschäftswert (≤ 0)",
+                    notes="Der Geschäftswert muss größer als 0 sein.",
+                )
+            if business_value > 100_000_000:
+                return FeeCalculation(
+                    kv_number=kv_number,
+                    description=description,
+                    business_value=business_value,
+                    fee_amount=0.0,
+                    calculation_basis="Geschäftswert außerhalb des Bereichs",
+                    notes=(
+                        f"Geschäftswert {business_value:,.2f} € übersteigt "
+                        f"100 Mio. € – bitte manuell prüfen."
+                    ),
+                )
             rate = kv_def.get("rate", 1.0) * multiplier
             table_fee = self._lookup_table_b(business_value)
             fee = round(table_fee * rate, 2)

@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     llm_max_retries: int = 3
     llm_format: str = "json"
 
+    # Geschäftsparameter
+    app_vat_rate: float = 0.19
+    app_business_value_max: float = 100_000_000.0
+
     @property
     def ollama_url(self) -> str:
         return f"http://{self.ollama_host}:{self.ollama_port}"

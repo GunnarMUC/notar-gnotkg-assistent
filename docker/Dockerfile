@@ -39,8 +39,13 @@ ENV OLLAMA_HOST=host.docker.internal:11434
 
 # Streamlit-Konfiguration
 ENV STREAMLIT_SERVER_PORT=8501
-ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
+ENV STREAMLIT_SERVER_ADDRESS=127.0.0.1
 ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Non-Root-User für minimale Rechte im Container
+RUN useradd --create-home --shell /bin/bash appuser \
+    && chown -R appuser:appuser /app
+USER appuser
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=127.0.0.1"]

@@ -18,9 +18,9 @@ def generate_invoice(
     settings = get_settings()
     now = datetime.now()
 
-    # Summen berechnen
+    vat_rate = settings.app_vat_rate
     total_net = sum(p.get("fee_amount", 0.0) for p in final_positions)
-    vat_amount = round(total_net * 0.19, 2)
+    vat_amount = round(total_net * vat_rate, 2)
     total_gross = total_net + vat_amount
 
     if output_format == "docx":

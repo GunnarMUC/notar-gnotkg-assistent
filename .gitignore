@@ -42,6 +42,11 @@ htmlcov/
 # Docker
 docker-compose.override.yml
 
-# Backup-Dateien
-*.bak
-*.tmp
+# Security Scan Reports (temporär, nicht committen)
+gitleaks-report.json
+semgrep-report.json
+semgrep-report-after.json
+bearer-report.json
+trivy-report.json
+trivy-fs-report.json
+pip-audit-report.json

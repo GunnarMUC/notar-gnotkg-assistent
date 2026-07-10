@@ -254,17 +254,18 @@ def parse_document(file_path: str | Path) -> ParsedDocument:
             f"Unterstützt: {', '.join(parsers.keys())}"
         )
 
-    logger.info(f"Parse Dokument: {path.name} ({suffix})")
+    file_hash = hash(path.name) % 100000
+    logger.info(f"Parse Dokument: #{file_hash} ({suffix})")
     try:
         result = parsers[suffix](path)
         logger.info(
-            f"Dokument geparst: {result.pages} Seiten, "
-            f"Qualität: {result.extraction_quality.value}, "
-            f"Textlänge: {len(result.full_text)} Zeichen"
+            f"Dokument #{file_hash} geparst: {result.pages} Seiten, "
+            f"Qualität: {result.extraction_quality.value}"
         )
         return result
     except Exception as e:
-        logger.error(f"Fehler beim Parsen von {path.name}: {e}")
+        logger.error(f"Fehler beim Parsen von Dokument #{file_hash}: {type(e).__name__}")
         raise RuntimeError(
-            f"Fehler beim Parsen des Dokuments '{path.name}': {e}"
+            f"Fehler beim Parsen des Dokuments. "
+            f"Bitte überprüfen Sie das Dateiformat."
         ) from e

@@ -185,12 +185,12 @@ with tab1:
                     parsed = parse_document(tmp_path)
                     st.session_state.parsed_document = parsed
                     st.session_state.workflow_step = "preview"
-
-                    # Temp-Datei aufräumen
-                    Path(tmp_path).unlink(missing_ok=True)
                 except Exception as e:
-                    st.error(f"Fehler beim Parsen: {e}")
+                    st.error("Fehler beim Parsen des Dokuments. Bitte überprüfen Sie das Dateiformat.")
+                    logger.error(f"Parse-Fehler: {type(e).__name__}")
                     st.session_state.parsed_document = None
+                finally:
+                    Path(tmp_path).unlink(missing_ok=True)
 
     # Vorschau des geparsten Dokuments
     if st.session_state.parsed_document is not None:
@@ -256,7 +256,10 @@ with tab2:
                     ]
                     st.rerun()
             except Exception as e:
-                st.error(f"Fehler bei der Extraktion: {e}")
+                st.error(
+                    "Fehler bei der Extraktion. "
+                    "Bitte überprüfen Sie, ob Ollama läuft und das Modell verfügbar ist."
+                )
     else:
         result = st.session_state.extraction_result
         st.success(
@@ -331,7 +334,7 @@ with tab3:
 
         # Gesamtsumme
         total_net = edited_df["fee_amount"].sum()
-        vat = total_net * 0.19
+        vat = total_net * settings.app_vat_rate
         total_gross = total_net + vat
 
         col_sum, col_vat, col_gross = st.columns(3)
@@ -382,7 +385,7 @@ with tab4:
         st.success("Rechnung zur Generierung bereit.")
 
         total_net = sum(p.get("fee_amount", 0) for p in st.session_state.final_positions)
-        vat = total_net * 0.19
+        vat = total_net * settings.app_vat_rate
         total_gross = total_net + vat
 
         st.write("### Zusammenfassung")
@@ -450,7 +453,10 @@ with tab4:
 
                     st.success("✅ Rechnung und Audit-Log erfolgreich erstellt!")
                 except Exception as e:
-                    st.error(f"Fehler bei der Rechnungserstellung: {e}")
+                    st.error(
+                        "Fehler bei der Rechnungserstellung. "
+                        "Bitte versuchen Sie es erneut."
+                    )
 
         st.divider()
         st.caption(
